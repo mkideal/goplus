@@ -15,12 +15,11 @@ func New() *cli.Command {
 
 type newT struct {
 	cli.Helper
-	Binary bool   `cli:"b,bin" usage:"generate binary application or not" dft:"true"`
 	Name   string `cli:"*name" usage:"name of created project" name:"NAME"`
-	Dir    string `cli:"d,dir" usage:"dir of project" dft:"./"`
+	Dir    string `cli:"d,dir" usage:"parent dir of generated project" dft:"./"`
 	Type   string `cli:"t,type" usage:"type of project, empty or one of basic/tree/http/my" dft:"basic" name:"TYPE"`
-	TplDir string `cli:"tpl-dir" usage:"useful if TYPE is empty or equal 'my'" name:"TPL_DIR"`
-	Values string `cli:"values" usage:"useful if TYPE is empty. Format: --values={k1:v1/k2:v2}"`
+	TplDir string `cli:"tpl-dir" usage:"useful if TYPE is empty or equal to 'my'" name:"TPL_DIR"`
+	Values string `cli:"values" usage:"useful if TYPE is empty. format: --values={k1:v1/k2:v2}"`
 }
 
 func (t *newT) Validate() error {
@@ -38,7 +37,7 @@ func (t *newT) Validate() error {
 
 var new_ = &cli.Command{
 	Name: "new",
-	Desc: "create a application or library",
+	Desc: "create a application",
 	Text: "", //TODO: add detail description
 
 	Argv: func() interface{} { return new(newT) },
@@ -52,13 +51,10 @@ var new_ = &cli.Command{
 		switch argv.Type {
 		case etc.Basic:
 			return newBasicApp(ctx, argv)
-
 		case etc.Tree:
 			return newTreeApp(ctx, argv)
-
 		case etc.HTTP:
 			return newHTTPApp(ctx, argv)
-
 		case etc.My:
 			return newMyApp(ctx, argv)
 		}

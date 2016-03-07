@@ -16,16 +16,22 @@ type rootT struct {
 
 var root = &cli.Command{
 	Name: "goplus",
-	Desc: "goplus is a tool for build and publish golang application and library",
+	Desc: "goplus is a tool for generate, build and publish golang application and library",
 
 	Text: `goplus binds all commands of go, e.g. build,install,run,test,get,fmt...
-So, you can use goplus <command> instead of go <command>.
+So, you can use goplus <command> instead of go <command>, e.g.
 
 	goplus build
 	goplus install
 	goplus test
 	goplus run
 	goplus fmt
+	......
+
+goplus has some new commands, e.g.
+
+	goplus new
+	goplus publish
 	......`,
 
 	Argv: func() interface{} { return new(rootT) },
