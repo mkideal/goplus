@@ -280,7 +280,7 @@ var help = &cli.Command{
 	Desc:        "display help",
 	CanSubRoute: true,
 	HTTPRouters: []string{"/v1/help"},
-	HTTPMethods: []string{http.MethodGet},
+	HTTPMethods: []string{"GET"},
 
 	Fn: func(ctx *cli.Context) error {
 		var (
