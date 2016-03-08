@@ -19,7 +19,7 @@ type publishT struct {
 	config publishConfig `cli:"-"`
 }
 
-func (argv *publishT) Validate() error {
+func (argv *publishT) Validate(ctx *cli.Context) error {
 	if argv.ConfigFile == "" {
 		return fmt.Errorf("config file is empty")
 	}

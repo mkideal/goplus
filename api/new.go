@@ -2,10 +2,10 @@ package api
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/mkideal/cli"
 	"github.com/mkideal/goplus/api/templates"
-	"github.com/mkideal/goplus/etc"
 )
 
 func New() *cli.Command {
@@ -14,28 +14,29 @@ func New() *cli.Command {
 
 type newT struct {
 	cli.Helper
-	Type string `cli:"t,type" usage:"type of project, empty or one of basic/tree/http/my" dft:"basic" name:"TYPE"`
+	Type string `cli:"t,type" usage:"type of project" dft:"basic" name:"TYPE"`
+	List bool   `cli:"!l,list" usage:"list all types of project template"`
 	templates.TemplateConfig
 }
 
-func (t *newT) Validate() error {
+func (t *newT) Validate(ctx *cli.Context) error {
+	clr := ctx.Color()
+	b := clr.Bold
 	if t.Name == "" {
-		return fmt.Errorf("NAME is empty")
+		return fmt.Errorf("%s is empty", b("NAME"))
 	}
 	if t.Type == "" && t.TplDir == "" {
-		return fmt.Errorf("TYPE and TPL_DIR both are empty")
+		return fmt.Errorf("%s and %s both are empty", b("TYPE"), b("TPL_DIR"))
 	}
-	if t.Type != "" && !etc.ValidateType(t.Type) {
-		return fmt.Errorf("TYPE invalid, try `goplus new -h'")
+	if t.Type != "" && !templates.ValidateType(t.Type) {
+		return fmt.Errorf("%s is invalid, try `goplus new -l'", b("TYPE"), b(t.Type))
 	}
 	return nil
 }
 
 var new_ = &cli.Command{
 	Name: "new",
-	Desc: "create a application",
-	Text: "", //TODO: add detail description
-
+	Desc: "create application skeleton by template type",
 	Argv: func() interface{} { return new(newT) },
 
 	Fn: func(ctx *cli.Context) error {
@@ -44,18 +45,12 @@ var new_ = &cli.Command{
 			ctx.String(ctx.Usage())
 			return nil
 		}
-		err, ok := templates.New(ctx, argv.Type, argv.TemplateConfig)
-		if !ok {
-			return newMyApp(ctx, argv.TemplateConfig)
+		if argv.List {
+			prefix := "\t"
+			content := strings.Join(templates.List(), "\n"+prefix)
+			ctx.String("list of all types:\n" + prefix + content + "\n")
+			return nil
 		}
-		return err
+		return templates.New(argv.Type, ctx, argv.TemplateConfig)
 	},
-}
-
-//----------
-// type: my
-//----------
-
-func newMyApp(ctx *cli.Context, argv templates.TemplateConfig) error {
-	return fmt.Errorf("Not implements")
 }

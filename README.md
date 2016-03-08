@@ -52,7 +52,7 @@ $> cat -n main.go
      8		cli.Helper
      9	}
     10	
-    11	func (argv *argT) Validate() error {
+    11	func (argv *argT) Validate(ctx *cli.Context) error {
     12		//TODO: validate something or remove this function.
     13		return nil
     14	}
