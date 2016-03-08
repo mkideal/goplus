@@ -134,7 +134,6 @@ func newTreeApp(ctx *cli.Context, argv *newT) error {
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/mkideal/cli"
 )
@@ -178,31 +177,7 @@ var root = &cli.Command{
 // help command
 //--------------
 
-var help = &cli.Command{
-	Name:        "help",
-	Desc:        "display help",
-	CanSubRoute: true,
-
-	Fn: func(ctx *cli.Context) error {
-		var (
-			args   = ctx.Args()
-			parent = ctx.Command().Parent()
-		)
-		if len(args) == 0 {
-			ctx.String(parent.Usage(ctx))
-			return nil
-		}
-		var (
-			child = parent.Route(args)
-			clr   = ctx.Color()
-		)
-		if child == nil {
-			return fmt.Errorf("command %s not found", clr.Yellow(strings.Join(args, " ")))
-		}
-		ctx.String(child.Usage(ctx))
-		return nil
-	},
-}
+var help = cli.HelpCommand("display help")
 
 //-----------------
 // version command
