@@ -37,6 +37,11 @@ func (argv *argT) Validate(ctx *cli.Context) error {
 	return nil
 }
 
+func run(ctx *cli.Context, argv *argT) error {
+	//TODO: do something here
+	return nil
+}
+
 func main() {
 	cli.Run(new(argT), func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*argT)
@@ -44,11 +49,7 @@ func main() {
 			ctx.WriteUsage()
 			return nil
 		}
-
-		//TODO: remove following line, and do something here
-		ctx.JSONIndentln(argv, "", "    ")
-
-		return nil
+		return run(ctx, argv)
 	})
 }
 `)
