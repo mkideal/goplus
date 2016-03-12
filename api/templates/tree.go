@@ -58,7 +58,7 @@ var root = &cli.Command{
 	Fn: func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*rootT)
 		if argv.Help || len(ctx.Args()) == 0 {
-			ctx.String(ctx.Usage())
+			ctx.WriteUsage()
 			return nil
 		}
 

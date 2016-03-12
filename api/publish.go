@@ -41,7 +41,7 @@ var publish = &cli.Command{
 	Fn: func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*publishT)
 		if argv.Help {
-			ctx.String(ctx.Usage())
+			ctx.WriteUsage()
 			return nil
 		}
 		return nil

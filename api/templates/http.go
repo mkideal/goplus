@@ -51,7 +51,7 @@ func main() {
 //------
 var root = &cli.Command{
 	Fn: func(ctx *cli.Context) error {
-		ctx.String(ctx.Usage())
+		ctx.WriteUsage()
 		return nil
 	},
 }
@@ -109,7 +109,7 @@ var daemon = &cli.Command{
 	Fn: func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*daemonT)
 		if argv.Help {
-			ctx.String(ctx.Usage())
+			ctx.WriteUsage()
 			return nil
 		}
 

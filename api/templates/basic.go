@@ -41,7 +41,7 @@ func main() {
 	cli.Run(new(argT), func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*argT)
 		if argv.Help {
-			ctx.String(ctx.Usage())
+			ctx.WriteUsage()
 			return nil
 		}
 

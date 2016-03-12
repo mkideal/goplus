@@ -39,7 +39,7 @@ goplus has some new commands, e.g.
 	Fn: func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*rootT)
 		if argv.Help || len(ctx.Args()) == 0 {
-			ctx.String(ctx.Usage())
+			ctx.WriteUsage()
 		} else if argv.Version {
 			ctx.String(etc.GoplusVersion + "\n")
 		}
