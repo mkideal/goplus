@@ -57,20 +57,21 @@ $> cat -n main.go
     13		return nil
     14	}
     15	
-    16	func main() {
-    17		cli.Run(new(argT), func(ctx *cli.Context) error {
-    18			argv := ctx.Argv().(*argT)
-    19			if argv.Help {
-    20				ctx.String(ctx.Usage())
-    21				return nil
-    22			}
-    23	
-    24			//TODO: remove following line, and do something here
-    25			ctx.JSONIndentln(argv, "", "    ")
-    26	
-    27			return nil
-    28		})
-    29	}
+    16	func run(ctx *cli.Context, argv *argT) error {
+    17		//TODO: do something here
+    18		return nil
+    19	}
+    20	
+    21	func main() {
+    22		cli.Run(new(argT), func(ctx *cli.Context) error {
+    23			argv := ctx.Argv().(*argT)
+    24			if argv.Help {
+    25				ctx.WriteUsage()
+    26				return nil
+    27			}
+    28			return run(ctx, argv)
+    29		})
+    30	}
 ```
 
 You can specify what type your application. The `TYPE` must be one of these:
@@ -95,91 +96,66 @@ $> cat -n main.go
      3	import (
      4		"fmt"
      5		"os"
-     6		"strings"
-     7	
-     8		"github.com/mkideal/cli"
-     9	)
-    10	
-    11	func main() {
-    12		if err := cli.Root(root,
-    13			cli.Tree(help),
-    14			cli.Tree(version),
-    15		).Run(os.Args[1:]); err != nil {
-    16			fmt.Fprintln(os.Stderr, err)
-    17			os.Exit(1)
-    18		}
-    19	}
-    20	
-    21	//--------------
-    22	// root command
-    23	//--------------
-    24	
-    25	type rootT struct {
-    26		cli.Helper
-    27	}
-    28	
-    29	var root = &cli.Command{
-    30		Name: os.Args[0],
-    31		//Desc: "describe the app",
-    32		Argv: func() interface{} { return new(rootT) },
-    33	
-    34		Fn: func(ctx *cli.Context) error {
-    35			argv := ctx.Argv().(*rootT)
-    36			if argv.Help || len(ctx.Args()) == 0 {
-    37				ctx.String(ctx.Usage())
-    38				return nil
-    39			}
-    40	
-    41			//TODO: do something
-    42			return nil
-    43		},
-    44	}
-    45	
-    46	//--------------
-    47	// help command
-    48	//--------------
-    49	
-    50	var help = &cli.Command{
-    51		Name:        "help",
-    52		Desc:        "display help",
-    53		CanSubRoute: true,
+     6	
+     7		"github.com/mkideal/cli"
+     8	)
+     9	
+    10	func main() {
+    11		if err := cli.Root(root,
+    12			cli.Tree(help),
+    13			cli.Tree(version),
+    14		).Run(os.Args[1:]); err != nil {
+    15			fmt.Fprintln(os.Stderr, err)
+    16			os.Exit(1)
+    17		}
+    18	}
+    19	
+    20	//--------------
+    21	// root command
+    22	//--------------
+    23	
+    24	type rootT struct {
+    25		cli.Helper
+    26	}
+    27	
+    28	var root = &cli.Command{
+    29		Name: os.Args[0],
+    30		//Desc: "describe the app",
+    31		Argv: func() interface{} { return new(rootT) },
+    32	
+    33		Fn: func(ctx *cli.Context) error {
+    34			argv := ctx.Argv().(*rootT)
+    35			if argv.Help || len(ctx.Args()) == 0 {
+    36				ctx.WriteUsage()
+    37				return nil
+    38			}
+    39	
+    40			//TODO: do something
+    41			return nil
+    42		},
+    43	}
+    44	
+    45	//--------------
+    46	// help command
+    47	//--------------
+    48	
+    49	var help = cli.HelpCommand("display help")
+    50	
+    51	//-----------------
+    52	// version command
+    53	//-----------------
     54	
-    55		Fn: func(ctx *cli.Context) error {
-    56			var (
-    57				args   = ctx.Args()
-    58				parent = ctx.Command().Parent()
-    59			)
-    60			if len(args) == 0 {
-    61				ctx.String(parent.Usage(ctx))
-    62				return nil
-    63			}
-    64			var (
-    65				child = parent.Route(args)
-    66				clr   = ctx.Color()
-    67			)
-    68			if child == nil {
-    69				return fmt.Errorf("command %s not found", clr.Yellow(strings.Join(args, " ")))
-    70			}
-    71			ctx.String(child.Usage(ctx))
-    72			return nil
-    73		},
-    74	}
-    75	
-    76	//-----------------
-    77	// version command
-    78	//-----------------
-    79	
-    80	const appVersion = "v0.0.1"
-    81	
-    82	var version = &cli.Command{
-    83		Name: "version",
-    84		Desc: "display version",
-    85	
-    86		Fn: func(ctx *cli.Context) error {
-    87			ctx.String(appVersion + "\n")
-    88			return nil
-    89		},
-    90	}
+    55	const appVersion = "v0.0.1"
+    56	
+    57	var version = &cli.Command{
+    58		Name: "version",
+    59		Desc: "display version",
+    60	
+    61		Fn: func(ctx *cli.Context) error {
+    62			ctx.String(appVersion + "\n")
+    63			return nil
+    64		},
+    65	}
 ```
 
 Try
