@@ -27,9 +27,7 @@ func HTTP(ctx *cli.Context, cfg TemplateConfig) error {
 
 import (
 	"fmt"
-	"net/http"
 	"os"
-	"strings"
 
 	"github.com/mkideal/cli"
 )
@@ -66,25 +64,7 @@ var help = &cli.Command{
 	HTTPRouters: []string{"/v1/help"},
 	HTTPMethods: []string{"GET"},
 
-	Fn: func(ctx *cli.Context) error {
-		var (
-			args   = ctx.Args()
-			parent = ctx.Command().Parent()
-		)
-		if len(args) == 0 {
-			ctx.String(parent.Usage(ctx))
-			return nil
-		}
-		var (
-			child = parent.Route(args)
-			clr   = ctx.Color()
-		)
-		if child == nil {
-			return fmt.Errorf("command %%s not found", clr.Yellow(strings.Join(args, " ")))
-		}
-		ctx.String(child.Usage(ctx))
-		return nil
-	},
+	Fn: cli.HelpCommandFn,
 }
 
 //--------
@@ -119,10 +99,11 @@ var daemon = &cli.Command{
 		addr := fmt.Sprintf(":%%d", argv.Port)
 		cli.Debugf("http addr: %%s", addr)
 
-		if err := ctx.Command().Root().RegisterHTTP(ctx); err != nil {
+		r := ctx.Command().Root()
+		if err := r.RegisterHTTP(ctx); err != nil {
 			return err
 		}
-		return http.ListenAndServe(addr, ctx.Command().Root())
+		return r.ListenAndServeHTTP(addr)
 	},
 }
 
