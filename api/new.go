@@ -22,9 +22,13 @@ type newT struct {
 func (t *newT) Validate(ctx *cli.Context) error {
 	clr := ctx.Color()
 	b := clr.Bold
-	if t.Name == "" {
+	if len(ctx.FreedomArgs()) == 0 || ctx.FreedomArgs()[0] == "" {
 		return fmt.Errorf("%s is empty", b("NAME"))
 	}
+	if len(ctx.FreedomArgs()) > 1 {
+		return fmt.Errorf("too many args for %s", b("NAME"))
+	}
+	t.Name = ctx.FreedomArgs()[0]
 	if t.Type == "" && t.TplDir == "" {
 		return fmt.Errorf("%s and %s both are empty", b("TYPE"), b("TPL_DIR"))
 	}
@@ -37,6 +41,9 @@ func (t *newT) Validate(ctx *cli.Context) error {
 var new_ = &cli.Command{
 	Name: "new",
 	Desc: "create application skeleton by template type",
+	Text: `    goplus new -h | --help
+    goplus new [-t TYPE] [ --tpl-dir=TPL ] [ -d | --dir=DIR ] <NAME>
+    goplus -l | --list`,
 	Argv: func() interface{} { return new(newT) },
 
 	Fn: func(ctx *cli.Context) error {

@@ -8,7 +8,7 @@ import (
 )
 
 type TemplateConfig struct {
-	Name   string `cli:"*name" usage:"name of created project" name:"NAME"`
+	Name   string `cli:"-"`
 	Dir    string `cli:"d,dir" usage:"parent dir of generated project" dft:"./"`
 	TplDir string `cli:"tpl-dir" usage:"useful if TYPE is empty or equal to my" name:"TPL_DIR"`
 	Values string `cli:"values" usage:"useful if TYPE is empty. format: --values={k1:v1/k2:v2}"`
