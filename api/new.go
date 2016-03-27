@@ -44,7 +44,8 @@ var new_ = &cli.Command{
 	Text: `    goplus new -h | --help
     goplus new [-t TYPE] [ --tpl-dir=TPL ] [ -d | --dir=DIR ] <NAME>
     goplus -l | --list`,
-	Argv: func() interface{} { return new(newT) },
+	Argv:        func() interface{} { return new(newT) },
+	CanSubRoute: true,
 
 	Fn: func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*newT)
