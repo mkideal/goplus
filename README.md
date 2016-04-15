@@ -36,7 +36,7 @@ go get github.com/mkideal/goplus
 `new` command creates a protect. Following command will generate a dir `hello` at current dir. Dir `hello` contains one file: `main.go`.
 
 ```shell
-$> goplus new --name hello
+$> goplus new hello
 ```
 
 ```shell
@@ -85,7 +85,7 @@ default is `basic`.
 Following command will generate a command tree application.
 
 ```shell
-$> goplus new -t tree --name treesample
+$> goplus new -t tree treesample
 ```
 
 ```shell
@@ -161,7 +161,7 @@ $> cat -n main.go
 Try
 
 ```shell
-$> goplus new -t http --name httpserver
+$> goplus new -t http httpserver
 $> cd httpserver
 $> go build
 $> ./httpserver daemon
