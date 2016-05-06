@@ -22,13 +22,13 @@ type newT struct {
 func (t *newT) Validate(ctx *cli.Context) error {
 	clr := ctx.Color()
 	b := clr.Bold
-	if len(ctx.FreedomArgs()) == 0 || ctx.FreedomArgs()[0] == "" {
+	if len(ctx.Args()) == 0 || ctx.Args()[0] == "" {
 		return fmt.Errorf("%s is empty", b("NAME"))
 	}
-	if len(ctx.FreedomArgs()) > 1 {
+	if len(ctx.Args()) > 1 {
 		return fmt.Errorf("too many args for %s", b("NAME"))
 	}
-	t.Name = ctx.FreedomArgs()[0]
+	t.Name = ctx.Args()[0]
 	if t.Type == "" && t.TplDir == "" {
 		return fmt.Errorf("%s and %s both are empty", b("TYPE"), b("TPL_DIR"))
 	}
