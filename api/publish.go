@@ -39,11 +39,7 @@ var publish = &cli.Command{
 	Argv: func() interface{} { return new(publishT) },
 
 	Fn: func(ctx *cli.Context) error {
-		argv := ctx.Argv().(*publishT)
-		if argv.Help {
-			ctx.WriteUsage()
-			return nil
-		}
+		//argv := ctx.Argv().(*publishT)
 		return nil
 	},
 }

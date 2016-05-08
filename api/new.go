@@ -49,10 +49,6 @@ var new_ = &cli.Command{
 
 	Fn: func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*newT)
-		if argv.Help {
-			ctx.WriteUsage()
-			return nil
-		}
 		if argv.List {
 			prefix := "\t"
 			content := strings.Join(templates.List(), "\n"+prefix)

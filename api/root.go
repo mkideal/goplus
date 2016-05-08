@@ -34,13 +34,12 @@ goplus has some new commands, e.g.
 	goplus publish
 	......`,
 
-	Argv: func() interface{} { return new(rootT) },
+	Argv:     func() interface{} { return new(rootT) },
+	NeedArgs: true,
 
 	Fn: func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*rootT)
-		if argv.Help || len(ctx.NativeArgs()) == 0 {
-			ctx.WriteUsage()
-		} else if argv.Version {
+		if argv.Version {
 			ctx.String(etc.GoplusVersion + "\n")
 		}
 		return nil

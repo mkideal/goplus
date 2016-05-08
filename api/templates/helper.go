@@ -5,6 +5,7 @@ import (
 	"sort"
 
 	"github.com/mkideal/cli"
+	"github.com/mkideal/pkg/debug"
 )
 
 type TemplateConfig struct {
@@ -20,7 +21,7 @@ var templatesMap = make(map[string]maker)
 
 func register(typ string, fn maker) bool {
 	if _, ok := templatesMap[typ]; ok {
-		cli.Panicf("repeat register template %s", typ)
+		debug.Panicf("repeat register template %s", typ)
 	}
 	templatesMap[typ] = fn
 	return true

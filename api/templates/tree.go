@@ -54,14 +54,9 @@ var root = &cli.Command{
 	Name: os.Args[0],
 	//Desc: "describe the app",
 	Argv: func() interface{} { return new(rootT) },
+	NeedArgs: true,
 
 	Fn: func(ctx *cli.Context) error {
-		argv := ctx.Argv().(*rootT)
-		if argv.Help || len(ctx.Args()) == 0 {
-			ctx.WriteUsage()
-			return nil
-		}
-
 		//TODO: do something
 		return nil
 	},
